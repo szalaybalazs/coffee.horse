@@ -38,9 +38,11 @@ export default async function Home() {
           muted
           loop
           autoPlay
-          src="/video.mp4"
+          playsInline
           className="max-w-[95vw] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg rounded-lg mt-32"
-        ></video>
+        >
+          <source src="/video.mp4" type="video/mp4" />
+        </video>
         <h2 className="mt-24 text-4xl font-bold">Main Features</h2>
         <ul className="max-w-screen-sm text-center mt-8 font-medium">
           <li className="mb-6 text-lg ">
