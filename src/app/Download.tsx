@@ -10,7 +10,9 @@ const Download: FunctionComponent<iDownloadProps> = ({ downloads }) => {
   const _handleClick = async () => {
     "use server";
     await kv.set("downloads", (downloads ?? 0) + 1);
-    redirect("/downloads/cafeteria-0.1.7.dmg");
+    redirect(
+      "https://coffee-horse.s3.eu-central-1.amazonaws.com/cafeteria-0.1.7.dmg"
+    );
   };
   return (
     <form action={_handleClick}>
