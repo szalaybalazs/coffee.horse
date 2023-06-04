@@ -1,8 +1,7 @@
 "use client";
 import { FunctionComponent } from "react";
-import { redirect } from "next/navigation";
-import { downloadFunction } from "./actions";
 import { useZact } from "zact/client";
+import { downloadFunction } from "./actions";
 
 interface iDownloadProps {
   downloads: number;
