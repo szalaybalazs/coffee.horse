@@ -1,22 +1,8 @@
-import Image from "next/image";
 import { kv } from "@vercel/kv";
 import Download from "./Download";
 
 export default async function Home() {
-  // const cart = await kv.get<{ id: string; quantity: number }[]>(params.user);
   const downloads = await kv.get<number>("downloads");
-
-  console.log(downloads);
-  //   return (
-  //     <div>
-  //       {cart?.map((item) => (
-  //         <div key={item.id}>
-  //           {item.id} - {item.quantity}
-  //         </div>
-  //       ))}
-  //     </div>
-  //   );
-  // }
 
   return (
     <>
@@ -42,6 +28,7 @@ export default async function Home() {
           className="max-w-[95vw] sm:max-w-screen-sm md:max-w-screen-md lg:max-w-screen-lg rounded-lg mt-32"
         >
           <source src="/video.mp4" type="video/mp4" />
+          <source src="/video.webm" type="video/webm" />
         </video>
         <h2 className="mt-24 text-4xl font-bold">Main Features</h2>
         <ul className="max-w-screen-sm text-center mt-8 font-medium">
