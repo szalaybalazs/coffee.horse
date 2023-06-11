@@ -17,7 +17,7 @@ export default async function Home() {
         <div className="flex gap-4 items-center flex-col">
           <Download downloads={downloads ?? 0} />
           <span className="text-md font-medium opacity-50">
-            Windows version coming soon
+            Version 0.1.8 available for MacOS and Windows
           </span>
         </div>
         <video
