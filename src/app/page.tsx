@@ -1,14 +1,14 @@
 import { kv } from "@vercel/kv";
 import Download from "./Download";
 import Footer from "./Footer";
-import { getReleases } from "./releases/page";
+import { getLatestRelease, getReleases } from "./releases/page";
 
 export const revalidate = 60;
 
 export default async function Home() {
   const downloads = await kv.get<number>("downloads");
 
-  const [release] = await getReleases();
+  const release = await getLatestRelease();
 
   return (
     <>
@@ -24,12 +24,14 @@ export default async function Home() {
         <h2 className="text-lg md:text-2xl font-medium opacity-75 mb-24">
           All-in-one icon generator utility for developers
         </h2>
-        <div className="flex gap-4 items-center flex-col">
-          <Download release={release} downloads={downloads ?? 0} />
-          <span className="text-md font-medium opacity-50">
-            Version {release?.name} available for MacOS and Windows
-          </span>
-        </div>
+        {release && (
+          <div className="flex gap-4 items-center flex-col">
+            <Download release={release} downloads={downloads ?? 0} />
+            <span className="text-md font-medium opacity-50">
+              Version {release?.name} available for MacOS and Windows
+            </span>
+          </div>
+        )}
 
         <video
           muted

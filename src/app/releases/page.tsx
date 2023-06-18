@@ -9,6 +9,12 @@ export const revalidate = 60;
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
+  log: {
+    debug: console.log,
+    info: console.log,
+    warn: console.log,
+    error: console.log,
+  },
 });
 
 export interface iRelease {
@@ -21,31 +27,68 @@ export interface iRelease {
 }
 
 export const getReleases = async (): Promise<iRelease[]> => {
-  const { data } = await octokit.request("GET /repos/{owner}/{repo}/releases", {
-    owner: "actegon",
-    repo: "cafeteria",
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
-  const releases = data
-    ?.filter((r) => !r.draft && !r.prerelease && !r.name?.startsWith("0.0"))
-    .map((r) => ({
-      name: r.name,
-      content: r.body,
-      url: r.url,
-      published_at: r.published_at ?? "",
-      macInstaller: r.assets.find((a) => a.name.endsWith("dmg"))
-        ?.browser_download_url,
-      winInstaller: r.assets.find((a) => a.name.endsWith("setup.exe"))
-        ?.browser_download_url,
-    }))
-    .sort(
-      (a, b) =>
-        new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+  try {
+    const { data } = await octokit.request(
+      "GET /repos/{owner}/{repo}/releases",
+      {
+        owner: "actegon",
+        repo: "cafeteria",
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      }
+    );
+    const releases = data
+      ?.filter((r) => !r.draft && !r.prerelease && !r.name?.startsWith("0.0"))
+      .map((r) => ({
+        name: r.name,
+        content: r.body,
+        url: r.url,
+        published_at: r.published_at ?? "",
+        macInstaller: r.assets.find((a) => a.name.endsWith("dmg"))
+          ?.browser_download_url,
+        winInstaller: r.assets.find((a) => a.name.endsWith("setup.exe"))
+          ?.browser_download_url,
+      }))
+      .sort(
+        (a, b) =>
+          new Date(b.published_at).getTime() -
+          new Date(a.published_at).getTime()
+      );
+
+    return releases as iRelease[];
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+export const getLatestRelease = async (): Promise<iRelease | null> => {
+  try {
+    const { data }: { data: any } = await octokit.request(
+      "GET /repos/{owner}/{repo}/releases/latest",
+      {
+        owner: "actegon",
+        repo: "cafeteria",
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      }
     );
 
-  return releases as iRelease[];
+    return {
+      name: data.name,
+      content: data.body,
+      url: data.url,
+      published_at: data.published_at ?? "",
+      macInstaller: data.assets.find((a: any) => a.name.endsWith("dmg"))
+        ?.browser_download_url,
+      winInstaller: data.assets.find((a: any) => a.name.endsWith("setup.exe"))
+        ?.browser_download_url,
+    };
+  } catch (error) {
+    return null;
+  }
 };
 
 const buttonClasses =

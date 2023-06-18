@@ -23,15 +23,14 @@ const Download: FunctionComponent<iDownloadProps> = ({
     if (platform.includes("win")) setPlatform("win");
   }, []);
 
-  const _handleDownload = async () => {
+  const _handleDownload = async (event: any) => {
     await mutate(downloads);
   };
 
   const href = useMemo(() => {
-    const platform = navigator.platform.toLowerCase();
-    if (platform.includes("win")) return release.winInstaller;
+    if (platform === "win") return release.winInstaller;
     return release.macInstaller;
-  }, [release?.macInstaller, release?.winInstaller]);
+  }, [release?.macInstaller, release?.winInstaller, platform]);
 
   return (
     <>
