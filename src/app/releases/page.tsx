@@ -7,6 +7,11 @@ interface ipageProps {}
 
 export const revalidate = 60;
 
+export const metadata = {
+  title: "Release notes | Cafeteria",
+  description: "Release notes for Cafeteria - I am working on it, promise! 🤞",
+};
+
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
   log: {
