@@ -3,6 +3,7 @@ import { marked } from "marked";
 import Link from "next/link";
 import { FunctionComponent } from "react";
 import Footer from "../Footer";
+import dayjs from "dayjs";
 interface ipageProps {}
 
 export const revalidate = 60;
@@ -124,9 +125,12 @@ const page: FunctionComponent<ipageProps> = async () => {
                 <span className="absolute -left-4 top-8 bottom-0 h-full w-0.5 opacity-25 transform  bg-white text-sm font-medium" />
               )}
 
-              <h2 className="text-lg font-bold mb-2 relative flex items-center">
-                <span className="absolute -left-6 rounded-full w-4 h-4 transform bg-white text-sm font-medium" />
+              <h2 className="text-lg font-bold mb-2 relative flex items-baseline">
+                <span className="absolute -left-6 top-[6px] translate-x-[1px] rounded-full w-4 h-4 transform bg-white text-sm font-medium" />
                 {r.name}
+                <span className="opacity-50 pl-2 text-sm font-bold">
+                  {dayjs(r.published_at).format("YYYY. MM. DD.")}
+                </span>
               </h2>
               {r.content && (
                 <div
