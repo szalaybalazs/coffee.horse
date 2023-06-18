@@ -138,7 +138,7 @@ const page: FunctionComponent<ipageProps> = async () => {
                 {r.macInstaller && (
                   <a
                     className={buttonClasses}
-                    href={`/downloads/${r.macInstaller?.split("?").pop()!}`}
+                    href={`/downloads/${r.macInstaller?.split("/").pop()!}`}
                   >
                      Download for Mac
                   </a>
@@ -146,7 +146,7 @@ const page: FunctionComponent<ipageProps> = async () => {
                 {r.winInstaller && (
                   <a
                     className={buttonClasses}
-                    href={`/downloads/${r.winInstaller?.split("?").pop()!}`}
+                    href={`/downloads/${r.winInstaller?.split("/").pop()!}`}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
