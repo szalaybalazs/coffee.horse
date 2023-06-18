@@ -55,41 +55,40 @@ const getReleases = async () => {
   }
 };
 
-function downloadFile(url, originalUrl) {
-  https
-    .get(url, options, (response) => {
-      if (response.statusCode === 200) {
-        const file = fs.createWriteStream(
-          "public/downloads/" + originalUrl?.split("/").pop()?.split("?")[0]
-        );
-        response.pipe(file);
-        console.log("File downloaded successfully.");
-      } else if (response.statusCode === 302) {
-        const newUrl = response.headers.location;
-        // console.log(`Redirecting to ${newUrl}`);
-        downloadFile(newUrl, originalUrl ?? url);
-      } else {
-        console.log(
-          `Failed to download file. Status code: ${response.statusCode}`
-        );
-      }
-    })
-    .on("error", (error) => {
-      console.error(`Error: ${error.message}`);
-    });
-}
+const downloadFile = (url, originalUrl) => {
+  return new Promise((res) => {
+    https
+      .get(url, options, (response) => {
+        if (response.statusCode === 200) {
+          const file = fs.createWriteStream(
+            "public/downloads/" + originalUrl?.split("/").pop()?.split("?")[0]
+          );
+          response.pipe(file);
+          console.log("File downloaded successfully.");
+          res(true);
+        } else if (response.statusCode === 302) {
+          const newUrl = response.headers.location;
+          // console.log(`Redirecting to ${newUrl}`);
+          downloadFile(newUrl, originalUrl ?? url).then((r) => res(r));
+        } else {
+          console.log(
+            `Failed to download file. Status code: ${response.statusCode}`
+          );
+        }
+      })
+      .on("error", (error) => {
+        res(false);
+        console.error(`Error: ${error.message}`);
+      });
+  });
+};
 
 getReleases().then(async (releases) => {
-  await Promise.all(
-    releases.map(async (release) => {
-      if (release.macInstaller) {
-        await downloadFile(release.macInstaller);
-      }
-      if (release.winInstaller) {
-        await downloadFile(release.winInstaller);
-      }
-    })
-  );
+  const urls = releases
+    .flatMap((release) => [release.macInstaller, release.winInstaller])
+    .filter(Boolean);
+
+  await Promise.all(urls.map((url) => downloadFile(url)));
 
   process.exit(0);
 });
