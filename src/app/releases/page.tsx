@@ -136,12 +136,18 @@ const page: FunctionComponent<ipageProps> = async () => {
               )}
               <div className="mt-4 flex gap-2">
                 {r.macInstaller && (
-                  <a className={buttonClasses} href={r.macInstaller}>
+                  <a
+                    className={buttonClasses}
+                    href={`/downloads/${r.macInstaller?.split("?").pop()!}`}
+                  >
                      Download for Mac
                   </a>
                 )}
                 {r.winInstaller && (
-                  <a className={buttonClasses} href={r.winInstaller}>
+                  <a
+                    className={buttonClasses}
+                    href={`/downloads/${r.winInstaller?.split("?").pop()!}`}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="12"

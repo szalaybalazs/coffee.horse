@@ -38,7 +38,7 @@ const Download: FunctionComponent<iDownloadProps> = ({
         Join {(downloads ?? 0).toLocaleString()} happy riders
       </span>
       <a
-        href={href}
+        href={`/downloads/${href?.split("?").pop()!}`}
         className="hover:scale-105 active:scale-95 transition-all  px-8 py-3 flex flex-col items-center gap-0 cursor-pointer rounded-lg text-lg uppercase font-medium"
         style={{ background: "rgb(165, 68, 55)" }}
         onClick={_handleDownload}
