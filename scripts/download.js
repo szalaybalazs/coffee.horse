@@ -5,7 +5,7 @@ const fs = require("fs");
 // const url =
 //   "https://github.com/actegon/cafeteria/releases/download/v0.1.9/cafeteria-0.1.9.dmg";
 
-const authToken = "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";
+const authToken = "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";
 
 const options = {
   headers: {
