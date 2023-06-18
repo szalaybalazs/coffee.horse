@@ -1,13 +1,23 @@
 import { kv } from "@vercel/kv";
 import Download from "./Download";
+import Footer from "./Footer";
+import { getReleases } from "./releases/page";
+
+export const revalidate = 60;
 
 export default async function Home() {
   const downloads = await kv.get<number>("downloads");
 
+  const [release] = await getReleases();
+
   return (
     <>
       <main className="flex min-h-screen items-center flex-col pt-16 px-8 text-center">
-        <img src="/extension.png" className="max-w-[128px] mb-8 block" alt="" />
+        <img
+          src="/extension.png"
+          className="max-w-[128px] mb-8 block"
+          alt="Cafeteria Icon"
+        />
         <h1 className="text-6xl md:text-8xl font-black uppercase mb-4">
           Cafeteria
         </h1>
@@ -15,11 +25,12 @@ export default async function Home() {
           All-in-one icon generator utility for developers
         </h2>
         <div className="flex gap-4 items-center flex-col">
-          <Download downloads={downloads ?? 0} />
+          <Download release={release} downloads={downloads ?? 0} />
           <span className="text-md font-medium opacity-50">
-            Version 0.1.8 available for MacOS and Windows
+            Version {release?.name} available for MacOS and Windows
           </span>
         </div>
+
         <video
           muted
           loop
@@ -76,10 +87,7 @@ export default async function Home() {
         </ul>
         <img className="max-w-screen mt-32" src="/banner.png" />
       </main>
-      <footer className="w-screen text-sm text-center opacity-80 py-8 font-medium">
-        {new Date().getFullYear()}© - All Rights Reserved | Created by{" "}
-        <a href="https://szalay.me">Balázs Szalay</a>
-      </footer>
+      <Footer />
     </>
   );
 }
