@@ -84,6 +84,7 @@ const downloadFile = (url, originalUrl) => {
 };
 
 getReleases().then(async (releases) => {
+  fs.mkdirSync("public/downloads", { recursive: true });
   const urls = releases
     .flatMap((release) => [release.macInstaller, release.winInstaller])
     .filter(Boolean);
